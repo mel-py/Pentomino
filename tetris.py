@@ -55,21 +55,7 @@ def cleared_row(board):
 			board.insert(0,[0 for _ in range(cols)])
 			
 def make_move(board, piece):
-	score = rows
-	for x in range(cols):
-		while True:
-			roatated_piece = rotate_piece(piece)
-			temp_board = board
-			y = 0
-			while check_collision(x, y, piece, temp_board) is False and y > rows:
-				y = y + 1
-			temp_board = place_piece(x, y, piece, temp_board)
-			s = pentomino.get_move_score(temp_board)
-			if s < score:
-				score = s
-			if rotated_piece = piece:
-				break
-			
+	return pentomino.get_move_score(board, piece)
 	
 pygame.init()
 screen = pygame.display.set_mode((200,400))
