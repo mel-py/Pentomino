@@ -55,16 +55,17 @@ def cleared_row(board):
 			del board[i]
 			board.insert(0,[0 for _ in range(cols)])
 			
-def make_move(board, piece):
-	return pentomino.get_best_score(board, piece)
+def get_move(board, piece):
+	return pentomino.get_best_move(board, piece)
 	
 pygame.init()
 screen = pygame.display.set_mode((200,400))
 done = False
 
 cur_piece = pieces[random(len(pieces))]
-x, y = 4, 0
 board = [[0 for y in range(cols)] for x in range(rows)]
+x = get_move(board, cur_piece)
+y = 0
 
 #game loop
 while not done:
@@ -94,8 +95,8 @@ while not done:
 	if y+len(cur_piece[0]) == 20 or check_collision(x, y+1, cur_piece, board):
 		board = place_piece(x, y, cur_piece, board)
 		cur_piece = pieces[random(len(pieces))]
-		make_move(board, cur_piece)
-		x, y, = 4, 0
-	if frame == 2000:
+		x = get_move(board, cur_piece)
+		y = 0
+	if frame == 1000:
 		y += 1
 		frame = 0
