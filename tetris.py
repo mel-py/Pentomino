@@ -26,11 +26,12 @@ def place_piece(x, y, piece, board):
 			if piece[i][j] == 1:
 				board[y+j][x+i] = 1
 	return board
-				
+	
+#check if the piece moves in the desired direction if it causes a collision			
 def check_collision(x, y, piece, board):
 	for i in range(len(piece)):
 		for j in range(len(piece[0])):
-			if piece[i][j] == 1 and board[y+j+1][x+i] == 1:
+			if piece[i][j] == 1 and board[y+j][x+i] == 1:
 				return True
 	return False
 	
@@ -55,7 +56,7 @@ def cleared_row(board):
 			board.insert(0,[0 for _ in range(cols)])
 			
 def make_move(board, piece):
-	return pentomino.get_move_score(board, piece)
+	return pentomino.get_best_score(board, piece)
 	
 pygame.init()
 screen = pygame.display.set_mode((200,400))
@@ -65,6 +66,7 @@ cur_piece = pieces[random(len(pieces))]
 x, y = 4, 0
 board = [[0 for y in range(cols)] for x in range(rows)]
 
+#game loop
 while not done:
 	screen.fill((0, 0, 0))
 	cleared_row(board)
@@ -73,12 +75,14 @@ while not done:
 			done = True
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RIGHT and x+len(cur_piece) < 10:
-				x = x + 1
+				if not check_collision(x+1, y, cur_piece, board):
+					x = x + 1
 			if event.key == pygame.K_LEFT and x > 0 and board[x-1][y] is not 1:
-				x = x - 1
+				if not check_collision(x-1, y, cur_piece, board):
+					x = x - 1
 			if event.key == pygame.K_UP:
 				cur_piece = rotate_piece(cur_piece)
-	
+	#draw the board and current piece
 	for i in range(0, len(cur_piece)):
 		for j in range(0, len(cur_piece[i])):
 			if cur_piece[i][j] == 1:
@@ -87,7 +91,7 @@ while not done:
 	draw_board()
 	pygame.display.flip()
 	frame = frame+1
-	if y+len(cur_piece[0]) == 20 or check_collision(x, y, cur_piece, board):
+	if y+len(cur_piece[0]) == 20 or check_collision(x, y+1, cur_piece, board):
 		board = place_piece(x, y, cur_piece, board)
 		cur_piece = pieces[random(len(pieces))]
 		make_move(board, cur_piece)

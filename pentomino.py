@@ -1,11 +1,12 @@
 def get_best_score(board, piece):
 	best_score = 0
 	best_move = 0
-	for i in range(len(board)):
-		score = get_move_score(board, piece, posX)
-		if score > best_score:
-			best_score = score
-			best_move = i
+	for i in range(len(board[0])):
+		print(i);
+		#score = get_move_score(board, piece, posX)
+		#if score > best_score:
+		#	best_score = score
+		#	best_move = i
 	return best_move
 	
 def get_move_score(board, piece, posX):
